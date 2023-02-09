@@ -6,8 +6,11 @@
 - use Jenkins to build and test your software projects continuously.
 
 2. Cài đặt
+- Yêu cầu phần cứng: tối thiếu 256MB và 1GB ổ cứng.
+- Java cũng phải được cài đặt trước.
 - xem link download và tải bản phù hợp rồi dùng nhé:  https://www.jenkins.io/download/ 
 cài đặt  thì thôi không cần phải note nữa. 
+- lời khuyên là nên dùng phiên bản "Long term support release (LTS)"
 
 3. Accessing Jenkins
 - b1) truy cập Jenkins qua link:  http://localhost:8080
@@ -19,3 +22,6 @@ cài đặt  thì thôi không cần phải note nữa.
 - 2) Sau khi tất cả các plugin được đề xuất đã được cài đặt, panel “Create First Admin User” sẽ hiển thị. 
 - Điền vào tất cả các trường với chi tiết tài khoản mong muốn và nhấn nút “Save and Finish”.
 https://www.guru99.com/download-install-jenkins.html
+
+5. Tạo Job
+- 
