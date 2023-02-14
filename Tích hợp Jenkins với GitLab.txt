@@ -1,0 +1,61 @@
+
+nếu còn mơ hồ về Docker thì tham khảo cách sử dụng ở link này: https://github.com/lucleba/docker-tutorial
+
+1. chạy jenkins trên Docker:
+	Xem Tích hợp Jenkins với Github
+
+2. Accessing Jenkins
+	Xem Tích hợp Jenkins với Github
+
+3. Customize Jenkins
+	Xem Tích hợp Jenkins với Github
+
+4. Expose Jenkins chạy ở localhost ra ngoài Internet bằng công cụ ngrok
+	Xem Tích hợp Jenkins với Github
+		 
+		 
+5. Tích hợp Jenkins với GitLab
+	1) Cài đặt plugin
+		Trong Jenkins Dashboard
+			chọn Manage Jenkins
+				chọn Manage Plugins
+					Trong Available plugins -> search: gitlab 
+					=> install
+	2) Tạo token cho user ( dùng để xác thực gitlab )
+		truy cập vào trang jenkins dashboard: 
+					localhost:8080
+			hoặc	https://b048-221-112-165-130.jp.ngrok.io
+		Góc trên bên phải màn hình click vào username -> chọn configure
+			Trong phân API Token:  -> click "Add new Token" nhập tên và general token
+			lưu token ra 1 file text và lưu trữ lại.		
+	3)	Tạo project trên jenkins
+		click vào New Item để tạo project mới.
+			nhập tên project -> chọn Pipeline -> ấn OK
+			
+	4) Đăng ký tài khoản gitlab 
+		đăng ký xong thì tạo Project thôi: 
+			chọn NewProject => Create Blank Project => nhập tên project 
+			
+		Create	
+		
+		Vào phần "Setting" của project ->  Webhooks 
+			Trong mục URL:
+				https://<username>:<token>@<jenkin_url>/project/<jenkin_projectname>
+			Trong mục "Trigger"
+				Push events => add webhook.
+				=> Test Push events.
+		Vào phần "Setting" của project ->  Repository 
+			Tạo Deploy tokens (sử dụng bên jenkin project để get code từ gilab):
+				nhập tên, expir date, 
+				chọn Scopes 
+				=> Click button "Create deploy token"
+				=> Username và password được tạo ra, hãy lưu ra file. 
+	5) Liên kết và cho phép Jenkins project truy cập vào gitlab
+		Trong project jenkins -> Configure 
+			Trong "Build Triggers" chọn "Build when a change is pushed to GitLab. GitLab webhook URL:...."
+			Trong "Pipeline"  chọn  Definition là "Pipeline script from SCM "
+				chỉ định Repository URL (gitlab project url)
+				Credentials => add => jenkins => nhập username và password
+				Trong "Branches to build" nhớ chỉ định đúng tên branch nha. :)))
+	
+

@@ -1,0 +1,29 @@
+docker run --name jenkins -p 8080:8080 -p 50000:50000  ^
+--rm -u root ^
+-v /var/run/docker.sock:/var/run/docker.sock ^
+-v /usr/bin/docker:/usr/bin/docker ^
+-v C:\Users\6137\work\AWS\Git\jenkins:/var/jenkins_home ^
+--privileged ^
+jenkins/jenkins:lts 
+
+-v /var/run/docker.sock:/var/run/docker.sock  :: đường dẫn lưu trong máy ảo unbtun trên máy PC
+
+1. Cài đặt plugin
+	Trong Jenkins Dashboard
+		chọn Manage Jenkins
+			chọn Manage Plugins
+				Trong Available plugins -> search: Docker pipeline 
+					=> install without restart
+2. Cấu Hình
+	Truy cập Jenkins project muốn build docker imange
+		-> Chọn "Pipeline Syntax"
+			Trong mục "Sample Step" chọn "withDockerRegistry: Sets up Docker registry endpoint"
+				nhập Docker registry URL: https://index.docker.io/v1/
+				Registry credentials: -> click "add" button -> jenkins
+					nhập docker hub username và docker hub password
+				-> Generate Pipeline Script
+				-> copy script và paste vào file Jenkinsfile trong folder code 
+		=> commit code lên GitLab và trải nghiệm thôi nào.
+		
+				
+

@@ -1,0 +1,93 @@
+
+nếu còn mơ hồ về Docker thì tham khảo cách sử dụng ở link này: https://github.com/lucleba/docker-tutorial
+
+1. chạy jenkins trên Docker:
+	docker run --name myjenkins -p 8080:8080 -p 50000:50000  ^
+	--rm -u root ^
+	-v /var/run/docker.sock:/var/run/docker.sock ^
+	-v /usr/bin/docker:/usr/bin/docker ^
+	-v C:\Users\6137\work\AWS\Git\jenkins:/var/jenkins_home ^
+	--privileged ^
+	jenkins/jenkins:lts 
+	
+	docker run ^
+	--rm -u root ^
+	-p 8080:8080 -p 50000:50000 ^
+	-v C:\Users\6137\work\AWS\Git\jenkins:/var/jenkins_home ^
+	-v $(which docker):/usr/bin/docker  ^
+	-v /var/run/docker.sock:/var/run/docker.sock  ^
+	-v "$HOME":/home  ^
+	jenkinsci/blueocean ^
+
+2. Accessing Jenkins
+b1) truy cập Jenkins qua link: http://localhost:8080
+b2) sử dụng lệnh docker logs để lấy root password
+
+3. Customize Jenkins
+Nhấp vào nút “Install suggested plugins” để Jenkins sẽ truy xuất và cài đặt các plugin cần thiết.
+Sau khi tất cả các plugin được đề xuất đã được cài đặt, panel “Create First Admin User” sẽ hiển thị.
+Điền vào tất cả các trường với chi tiết tài khoản mong muốn và nhấn nút “Save and Finish”. 
+
+4.  Expose Jenkins chạy ở localhost ra ngoài Internet bằng công cụ ngrok
+	1) Cài đặt ngrok
+				https://ngrok.com/download
+		tạo tài khoản ngrok và lấy token: 
+				https://dashboard.ngrok.com/login
+		chạy câu lệnh sau trên terminal 
+			ngrok config add-authtoken <token>
+			ngrok http 8080 
+		copy đường dẫn được tạo ra bởi ngrok và chạy thử trên bowser
+		 vd: https://b048-221-112-165-130.jp.ngrok.io
+		 
+		 
+5. Tích hợp Jenkins với github bằng Freestyle
+	1) Tạo Github repository
+		sau khi tạo repository -> tab Setting -> Webhook -> add webhook
+	
+	2) Thêm link jenkins vào Github webhook	
+		trong textbox Payload URL: gắn url được gen bởi ngrok 
+			VD: https://b048-221-112-165-130.jp.ngrok.io/github-webhook/
+		★lưu ý là nhớ thêm cái đuôi  "/github-webhook/"	
+		
+		trong phần "Which events would you like to trigger this webhook?" cái loại events nào thì sẽ kích hoạt cái webhook này.
+		thì chọn:  push 
+		
+	3) Tạo project trên jenkins
+		truy cập vào trang jenkins dashboard: 
+					localhost:8080
+			hoặc	https://b048-221-112-165-130.jp.ngrok.io
+		click vào New Item để tạo project mới.
+			nhập tên project -> chọn Freestyle project -> ấn OK
+			sau khi project được tạo xong, click vào project.
+			chọn configure
+				Trong "Source Code Management" chọn Git 
+					paste  Repository URL  đã tạo ở bên trên vào textbox
+				Trong mục "Build Triggers" chọn  "GitHub hook trigger for GITScm polling"
+			Lưu lại và sang bước tiếp theo viết code và đẩy code lên github thôi.
+	
+	4) Đẩy code lên GitHub
+	
+	
+6. Tích hợp Jenkins với github	bằng Jenkinsfile
+	https://www.jenkins.io/doc/book/pipeline/
+	
+	1) tạo File Jenkinsfile
+		File Jenkinsfile được đặt trong cùng thư mục chứa code.
+	2) Tạo project trên jenkins
+		click vào New Item để tạo project mới.
+			nhập tên project -> chọn PipeLine -> ấn OK
+			
+		Trong configure:
+			Trong mục "Build Triggers" chọn  "GitHub hook trigger for GITScm polling"
+			Trong mục "Pipeline"  phần Definition 
+				chọn "Pipeline script from SCM"
+					trong "SCM"  chọn  "Git"
+						Gắn  Repository URL  đã tạo ở bên trên vào textbox
+			
+		Lưu lại ( Save )
+		
+	3) Trong màn hình quản trị của project;
+		Click "Build Now"
+	
+	
+	4) Đẩy code lên GitHub
